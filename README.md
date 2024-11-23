@@ -1,5 +1,7 @@
 # Markdown Viewer
 
+![test workflow](https://github.com/julianolf/mdview/actions/workflows/test.yaml/badge.svg)
+
 Open Markdown files using the default web browser for preview.
 
 The sole purpose of this program is to provide an idea of how Markdown files will display when viewed on sites like GitHub.
