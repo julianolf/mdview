@@ -51,11 +51,10 @@ func usage() {
 }
 
 func init() {
-	tmp := os.TempDir()
-
-	flag.StringVar(&oflag, "o", tmp, "Output directory for the preview file")
-	flag.BoolVar(&vflag, "v", false, "Show version number and quit")
 	flag.Usage = usage
+	flag.StringVar(&oflag, "o", os.TempDir(), "Output directory for the preview file")
+	flag.BoolVar(&vflag, "v", false, "Show version number and quit")
+	flag.Parse()
 }
 
 func open(filename string) error {
@@ -141,7 +140,6 @@ func run(files []string) {
 }
 
 func main() {
-	flag.Parse()
 	if vflag {
 		version()
 	}
