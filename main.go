@@ -17,7 +17,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 )
 
-const version = "v0.1.0"
+const semver = "v0.1.0"
 
 //go:embed github-markdown.css
 var css string
@@ -35,7 +35,7 @@ var (
 	vflag bool
 )
 
-type data struct {
+type Data struct {
 	CSS     template.CSS
 	Content template.HTML
 }
@@ -70,29 +70,29 @@ func open(filename string) error {
 }
 
 func convert(filename string) (string, error) {
-	file, err := os.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
 
 	markdown := goldmark.New(goldmark.WithExtensions(extension.GFM))
-	var buf bytes.Buffer
-	if err := markdown.Convert(file, &buf); err != nil {
+	var buffer bytes.Buffer
+	if err := markdown.Convert(content, &buffer); err != nil {
 		return "", err
 	}
 
-	return buf.String(), nil
+	return buffer.String(), nil
 }
 
 func write(filename, content string) error {
-	out, err := os.Create(filename)
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer file.Close()
 
-	dt := data{template.CSS(css), template.HTML(content)}
-	if err := tmpl.Execute(out, dt); err != nil {
+	data := Data{template.CSS(css), template.HTML(content)}
+	if err := tmpl.Execute(file, data); err != nil {
 		return err
 	}
 
@@ -115,13 +115,13 @@ func preview(filename string) {
 		return
 	}
 
-	outfile := rename(filename)
-	if err := write(outfile, content); err != nil {
+	filename = rename(filename)
+	if err := write(filename, content); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 
-	if err := open(outfile); err != nil {
+	if err := open(filename); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 }
@@ -134,15 +134,15 @@ func run(files []string) {
 	wg.Wait()
 }
 
-func showVersion() {
-	fmt.Println(os.Args[0], version)
+func version() {
+	fmt.Println(os.Args[0], semver)
 	os.Exit(0)
 }
 
 func main() {
 	flag.Parse()
 	if vflag {
-		showVersion()
+		version()
 	}
 
 	run(flag.Args())
