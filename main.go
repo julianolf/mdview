@@ -45,16 +45,17 @@ func version() {
 	os.Exit(0)
 }
 
+func usage() {
+	fmt.Fprintf(os.Stdout, "Usage: %s [file ...]\n", os.Args[0])
+	flag.PrintDefaults()
+}
+
 func init() {
 	tmp := os.TempDir()
 
 	flag.StringVar(&oflag, "o", tmp, "Output directory for the preview file")
 	flag.BoolVar(&vflag, "v", false, "Show version number and quit")
-
-	flag.Usage = func() {
-		fmt.Fprintf(os.Stdout, "Usage: %s [file ...]\n", os.Args[0])
-		flag.PrintDefaults()
-	}
+	flag.Usage = usage
 }
 
 func open(filename string) error {
