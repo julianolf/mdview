@@ -50,4 +50,5 @@ mdview -h
 ## Credits
 
 - Markdown parser: [goldmark](https://github.com/yuin/goldmark)
+- Browser helpers: [browser](https://github.com/pkg/browser)
 - CSS: [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
