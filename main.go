@@ -40,6 +40,11 @@ type Data struct {
 	Content template.HTML
 }
 
+func version() {
+	fmt.Println(os.Args[0], semver)
+	os.Exit(0)
+}
+
 func init() {
 	tmp := os.TempDir()
 
@@ -132,11 +137,6 @@ func run(files []string) {
 		go preview(filename)
 	}
 	wg.Wait()
-}
-
-func version() {
-	fmt.Println(os.Args[0], semver)
-	os.Exit(0)
 }
 
 func main() {
