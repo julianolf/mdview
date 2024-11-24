@@ -7,12 +7,11 @@ import (
 	"fmt"
 	"html/template"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 
+	"github.com/pkg/browser"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 )
@@ -55,23 +54,6 @@ func init() {
 	flag.StringVar(&oflag, "o", os.TempDir(), "Output directory for the preview file")
 	flag.BoolVar(&vflag, "v", false, "Show version number and quit")
 	flag.Parse()
-}
-
-func open(filename string) error {
-	url := "file://" + filename
-
-	// FIXME: Better handling of Linux variants, maybe support other OSs
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case "linux":
-		cmd = exec.Command("xdg-open", url)
-	case "darwin":
-		cmd = exec.Command("open", url)
-	default:
-		return fmt.Errorf("Unsupported OS")
-	}
-
-	return cmd.Start()
 }
 
 func convert(filename string) (string, error) {
@@ -126,7 +108,7 @@ func preview(filename string) {
 		return
 	}
 
-	if err := open(filename); err != nil {
+	if err := browser.OpenFile(filename); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 }
