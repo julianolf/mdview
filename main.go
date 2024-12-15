@@ -11,9 +11,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/julianolf/mdview/markdown"
 	"github.com/pkg/browser"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
 )
 
 const semver = "v0.2.0"
@@ -57,18 +56,17 @@ func init() {
 }
 
 func convert(filename string) (string, error) {
-	content, err := os.ReadFile(filename)
+	file, err := os.Open(filename)
 	if err != nil {
 		return "", err
 	}
 
-	markdown := goldmark.New(goldmark.WithExtensions(extension.GFM))
-	var buffer bytes.Buffer
-	if err := markdown.Convert(content, &buffer); err != nil {
+	var buf bytes.Buffer
+	if err := markdown.Convert(file, &buf); err != nil {
 		return "", err
 	}
 
-	return buffer.String(), nil
+	return buf.String(), nil
 }
 
 func write(filename, content string) error {
