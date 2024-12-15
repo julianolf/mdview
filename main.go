@@ -60,6 +60,7 @@ func convert(filename string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer file.Close()
 
 	var buf bytes.Buffer
 	if err := markdown.Convert(file, &buf); err != nil {
