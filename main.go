@@ -17,7 +17,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 )
 
-const semver = "v0.2.0"
+const semver = "v0.2.1"
 
 //go:embed github-markdown.css
 var css string
